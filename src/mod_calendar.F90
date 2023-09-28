@@ -82,7 +82,11 @@ MODULE mod_calendar
         ELSE IF (ngcm_unit == 4) THEN ! days
            currStep = ngcm_step * 86400.d0
         ELSE IF (ngcm_unit == 5) THEN ! months
-           currStep = ngcm_step * daysInMonth(imon, 3) * 86400.d0
+           jcaltype = 1
+           IF (.not. noleap .AND. ((MOD(nextYear, 4) .EQ. 0 .AND. MOD(nextYear, 100) .NE. 0) &
+               .OR. MOD(nextYear, 400) .EQ. 0)) jcaltype = 2
+           IF (mon30day) jcaltype = 3
+           currStep = ngcm_step * daysInMonth(imon, jcaltype) * 86400.d0
         ELSE IF (ngcm_unit == 6) THEN ! years
            jcaltype = 1
            IF (.not. noleap .AND. ((MOD(nextYear, 4) .EQ. 0 .AND. MOD(nextYear, 100) .NE. 0) &
